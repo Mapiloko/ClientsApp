@@ -11,18 +11,12 @@ namespace AspApp.Services
 {
     public class ClientRepository: IClientRepository
     {
-        // private List<Contact> _contacts;
         private readonly DatabaseContext _context;
 
 
         public ClientRepository(DatabaseContext context)
         {
             _context = context;
-            // _clients = new List<Client>()
-            // {
-            //     new Client(){Id = 1, Name = "Action"},
-            //     new Client(){Id = 2, Name = "Comedy"}
-            // };
         }
         public async Task<List<Client>> GetClients()
         {
@@ -38,11 +32,9 @@ namespace AspApp.Services
 
         public async Task AddClient(Client client)
         {
-            _context.UserClients.Add(client);
-
+            await _context.UserClients.AddAsync(client);
             await _context.SaveChangesAsync();
-            // client.Id = _clients.Max(x => x.Id) + 1;
-            // _clients.Add(client);
+            
         }
     }
 }

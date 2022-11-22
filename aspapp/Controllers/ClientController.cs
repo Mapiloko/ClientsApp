@@ -50,13 +50,13 @@ namespace AspApp.Controllers
         }
 
         [HttpPost]
-         public ActionResult Post([FromBody] ClientCreationDto clientCreationDto)
+         public async Task<IActionResult> Post([FromBody] ClientCreationDto clientCreationDto)
          {
             var client = _mapper.Map<Client>(clientCreationDto);
 
-            _repo.AddClient(client);
+            await _repo.AddClient(client);
 
-           return NoContent();
+           return Ok(client);
          }
 
          [HttpPut("{id:int}")]
@@ -72,17 +72,17 @@ namespace AspApp.Controllers
          }
 
          [HttpDelete("{id:int}")]
-         public async Task<ActionResult> Delete(int id)
+         public async Task<IActionResult> Delete(int id)
          {
-            var actor = await _context.UserClients.FirstOrDefaultAsync(x => x.Id == id);
+            var client = await _context.UserClients.FirstOrDefaultAsync(x => x.Id == id);
 
-            if(actor == null)
+            if(client == null)
             {
                 return NotFound();
             }
-            _context.Remove(actor);
+            _context.Remove(client);
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(client);
          }
 
         

@@ -32,9 +32,6 @@ namespace AspApp.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ContactDto>>> Get()
         {
-            // var client = _mapper.Map<Client>(clientCreationDto);
-            // var genres =  await _context.UserContacts.ToListAsync();
-
             var contacts =  await _repo.GetContacts();
 
             return _mapper.Map<List<ContactDto>>(contacts);
@@ -51,13 +48,12 @@ namespace AspApp.Controllers
         }
 
         [HttpPost]
-         public ActionResult Post([FromBody] ContactCreationDto contactCreationDto)
+         public async Task<IActionResult> Post([FromBody] ContactCreationDto contactCreationDto)
          {
             var contact = _mapper.Map<Contact>(contactCreationDto);
+            await _repo.AddContact(contact);
 
-            _repo.AddContact(contact);
-
-           return NoContent();
+           return Ok(contact);
          }
 
          [HttpPut("{id:int}")]

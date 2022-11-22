@@ -38,7 +38,7 @@ namespace AspApp.Services
 
         public async Task AddContact(Contact contact)
         {
-             _context.UserContacts.Add(contact);
+             await _context.UserContacts.AddAsync(contact);
              await _context.SaveChangesAsync();
         }
     }

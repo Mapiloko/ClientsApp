@@ -16,10 +16,10 @@ function App() {
   const [emails, setEmails] = useState([])
 
   useEffect(()=>{
-    fetch('https://localhost:7208/api/contact')
+    fetch('https://localhost:5000/api/Contact')
         .then(response => response.json())
         .then((data) =>{
-          setContact(data)
+          setContacts(data)
           let arr = []
           data.forEach(element => {
             arr.push(element.email)
@@ -28,7 +28,7 @@ function App() {
           setEmails(arr)
         });
 
-    fetch('https://localhost:7208/api/client')
+    fetch('https://localhost:5000/api/client')
         .then(response => response.json())
         .then((data) =>{
           setClients(data)

@@ -63,7 +63,7 @@ export default function CreateClient({contacts, setClients}) {
           body: JSON.stringify({ "linkedContacts": likedC.length, "name": name, "code": code})
         };
 
-        fetch('https://localhost:7208/api/client', requestOptions)
+        fetch('https://localhost:5000/api/client', requestOptions)
             .then(response => response.json())
             .catch(e=> console.log(e))
         setName("")

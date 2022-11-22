@@ -31,7 +31,7 @@ export default function CreateContact({emails, clients, setContacts}) {
           body: JSON.stringify({name: name, surName: surname, email: email,linkedClients: likedC.length })
         };
 
-        fetch('https://localhost:7208/api/contact', requestOptions)
+        fetch('https://localhost:5000/api/contact', requestOptions)
             .then(response => response.json())
             .catch(e=> console.log(e))
 

@@ -15,7 +15,6 @@ export default function Home({clients, contacts}) {
       else
         navigate('/createcontact')
     }
-
     function openCity(evt, show) {
       var i, tablinks;
       if(show === "clients")

@@ -1,0 +1,114 @@
+.header{
+  text-align: center;
+  font-size: bold;
+  font-weight: 800;
+  font-style: italic;
+  margin-top: 3rem;
+}
+
+.createClient{
+  width: 14rem;
+  font-size: 20px;
+  background-color: #b3cf99;
+  font-weight: 500;
+  color: azure;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 2rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+.headings{
+  border: 2px solid #b3cf99;
+  padding: 1rem;
+  margin: 0 2rem;
+  border-radius: 5px;
+}
+.content{
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  border-top: 2px solid #b3cf99;
+  margin: 1rem 2rem;
+}
+.item{
+  padding: 1rem;
+  box-shadow: #b3cf99 0px 3px 8px;
+}
+
+.inputcontent{
+  border: none;
+  border-bottom: 1px solid;
+}
+.labelInput{
+  padding: 0 2rem;
+  font-weight: 500;
+}
+.clinetcontent{
+  margin-top: 1.5rem;
+  box-shadow: #b3cf99 0px 3px 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.saveBtn{
+  width: 40%;
+  font-size: 20px;
+  background-color: #b3cf99;
+  font-weight: 500;
+  color: azure;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #b3cf99;
+  border-top: none;
+}
+
+.unlinkClient{
+  text-decoration: underline;
+  border: none;
+  background-color: transparent;
+}
+.goback{
+  width: 20%;
+  font-size: 20px;
+  background-color: #b3cf99;
+  font-weight: 500;
+  color: azure;
+  margin-right: -0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

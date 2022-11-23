@@ -20,19 +20,19 @@ namespace AspApp.Services
         }
         public async Task<List<Client>> GetClients()
         {
-            var _clients =  await _context.UserClients.ToListAsync();
+            var _clients =  await _context.Clients.ToListAsync();
             return _clients;
         }
 
         public async Task<Client> GetClientById(int id)
         {
-             var client = await _context.UserClients.FirstOrDefaultAsync(x => x.Id == id );
+             var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == id );
              return client;
         }
 
         public async Task AddClient(Client client)
         {
-            await _context.UserClients.AddAsync(client);
+            await _context.Clients.AddAsync(client);
             await _context.SaveChangesAsync();
             
         }

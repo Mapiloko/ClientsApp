@@ -39,7 +39,7 @@ namespace AspApp.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ContactDto>> Get(int id)
         {
-            var genre = await _context.UserContacts.FirstOrDefaultAsync(x => x.Id == id );
+            var genre = await _context.Contacts.FirstOrDefaultAsync(x => x.Id == id );
             if(genre == null)
             {
                 return NotFound();
@@ -71,7 +71,7 @@ namespace AspApp.Controllers
          [HttpDelete("{id:int}")]
          public async Task<ActionResult> Delete(int id)
          {
-            var genre = await _context.UserContacts.FirstOrDefaultAsync(x => x.Id == id);
+            var genre = await _context.Contacts.FirstOrDefaultAsync(x => x.Id == id);
 
             if(genre == null)
             {

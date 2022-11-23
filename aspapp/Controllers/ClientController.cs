@@ -74,7 +74,7 @@ namespace AspApp.Controllers
          [HttpDelete("{id:int}")]
          public async Task<IActionResult> Delete(int id)
          {
-            var client = await _context.UserClients.FirstOrDefaultAsync(x => x.Id == id);
+            var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == id);
 
             if(client == null)
             {

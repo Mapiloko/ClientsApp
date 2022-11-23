@@ -26,19 +26,19 @@ namespace AspApp.Services
         }
         public async Task<List<Contact>> GetContacts()
         {
-            var _contacts =  await _context.UserContacts.ToListAsync();
+            var _contacts =  await _context.Contacts.ToListAsync();
             return _contacts;
         }
 
         public async Task<Contact> GetContactById(int id)
         {
-            var _contact = await _context.UserContacts.FirstOrDefaultAsync(x => x.Id == id );
+            var _contact = await _context.Contacts.FirstOrDefaultAsync(x => x.Id == id );
             return _contact;
         }
 
         public async Task AddContact(Contact contact)
         {
-             await _context.UserContacts.AddAsync(contact);
+             await _context.Contacts.AddAsync(contact);
              await _context.SaveChangesAsync();
         }
     }

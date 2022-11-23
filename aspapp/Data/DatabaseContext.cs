@@ -20,8 +20,8 @@ namespace AspApp.Data
 
         }
 
-        public DbSet<Contact> UserContacts {get; set;}
-        public DbSet<Client> UserClients {get; set;}
+        public DbSet<Contact> Contacts {get; set;}
+        public DbSet<Client> Clients {get; set;}
         
     }
 }

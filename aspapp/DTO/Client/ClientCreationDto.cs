@@ -7,10 +7,13 @@ namespace AspApp.DTO.Client
 {
     public class ClientCreationDto
     {
+
+        public string? key {get; set;}
         public string? Name {get; set;}
 
-        public int? LinkedContacts {get; set;}
         public string? Code {get; set;}
+        public IEnumerable<string>? Contacts {get; set;}
+
 
     }
 }

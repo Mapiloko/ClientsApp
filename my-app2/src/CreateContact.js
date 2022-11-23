@@ -23,12 +23,12 @@ export default function CreateContact({emails, clients, setContacts}) {
             setsaveValue(true)
         }, 1000);
         const unique_id = uuid();
-        setContacts({name: name, surName: surname, email: email,linkedClients: likedC.length, id : unique_id })
+        setContacts({name: name, surName: surname, email: email,linkedClients: likedC.length, key : unique_id })
 
         const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({name: name, surName: surname, email: email,linkedClients: likedC.length })
+          body: JSON.stringify({key : unique_id, name: name, surName: surname, clients:likedC, email: email})
         };
 
         fetch('https://localhost:5000/api/contact', requestOptions)
@@ -134,7 +134,7 @@ export default function CreateContact({emails, clients, setContacts}) {
         <div className='col-md-6'>
         <FormGroup>
           {clients.map((client)=>{
-            return <FormControlLabel onChange={(e)=>linkClients(e,client.id)} value={client.name} key={client.id} control={<Checkbox />} label={client.name} />
+            return <FormControlLabel onChange={(e)=>linkClients(e,client.key)} value={client.name} key={client.key} control={<Checkbox />} label={client.name} />
           })}
         </FormGroup>
         </div>

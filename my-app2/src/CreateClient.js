@@ -42,25 +42,25 @@ export default function CreateClient({contacts, setClients}) {
        else
         neValue = neValue.concat(nn.toString())
 
-        // setCode(neValue)
-        const unique_id = uuid();
-        setClients({id: unique_id, linkedContacts: likedC.length, name: name, code: neValue})
-        
         return neValue
-    }
-
-    const SaveClient =()=>{
+      }
+      
+      const SaveClient =()=>{
         setsaveValue(false)
         setTimeout(() => {
-            setsaveValue(true)
+          setsaveValue(true)
         }, 1000);
         
         var code = generateCode()
-        
+
+        const unique_id = uuid();
+
+        setClients({key: unique_id, linkedContacts: likedC.length, name: name, code: code})
+
         const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ "linkedContacts": likedC.length, "name": name, "code": code})
+          body: JSON.stringify({ key: unique_id, name: name, code: code, contacts: likedC})
         };
 
         fetch('https://localhost:5000/api/client', requestOptions)
@@ -106,7 +106,7 @@ export default function CreateClient({contacts, setClients}) {
         <div className='col-md-6'>
         <FormGroup>
           {contacts.map((contact)=>{
-            return <FormControlLabel onChange={(e)=>linkContacts(e,contact.id)} value={contact.name} key={contact.id} control={<Checkbox />} label={contact.name} />
+            return <FormControlLabel onChange={(e)=>linkContacts(e,contact.key)} value={contact.name} key={contact.key} control={<Checkbox />} label={contact.name} />
           })}
         </FormGroup>
         </div>

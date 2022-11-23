@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspApp.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221122171920_addedNewColumns")]
-    partial class addedNewColumns
+    [Migration("20221123164706_changedPrimaryKey")]
+    partial class changedPrimaryKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,8 @@ namespace AspApp.Migrations
 
             modelBuilder.Entity("AspApp.Models.Client", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("key")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -41,18 +38,15 @@ namespace AspApp.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("key");
 
-                    b.ToTable("UserClients");
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("AspApp.Models.Contact", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("key")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -66,39 +60,35 @@ namespace AspApp.Migrations
                     b.Property<string>("SurName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("key");
 
-                    b.ToTable("UserContacts");
+                    b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("ClientContact", b =>
+            modelBuilder.Entity("AspApp.Models.LinkdContacts", b =>
                 {
-                    b.Property<int>("ClientsId")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ContactsId")
-                        .HasColumnType("int");
+                    b.Property<string>("ContactId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ClientsId", "ContactsId");
+                    b.HasKey("ClientId", "ContactId");
 
-                    b.HasIndex("ContactsId");
-
-                    b.ToTable("ClientContact");
+                    b.ToTable("LinkdContacts");
                 });
 
-            modelBuilder.Entity("ClientContact", b =>
+            modelBuilder.Entity("AspApp.Models.LinkedClients", b =>
                 {
-                    b.HasOne("AspApp.Models.Client", null)
-                        .WithMany()
-                        .HasForeignKey("ClientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("ContactId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasOne("AspApp.Models.Contact", null)
-                        .WithMany()
-                        .HasForeignKey("ContactsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ContactId", "ClientId");
+
+                    b.ToTable("LinkedClients");
                 });
 #pragma warning restore 612, 618
         }

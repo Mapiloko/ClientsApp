@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AspApp.Models;
 using AspApp.DTO.Contact;
 using AspApp.DTO.Client;
-using AspApp.Models;
 using AutoMapper;
 
 namespace AspApp.Helpers

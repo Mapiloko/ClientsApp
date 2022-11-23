@@ -20,8 +20,16 @@ namespace AspApp.Data
 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<LinkedClients>().HasKey(x=> new {x.ContactId, x.ClientId});
+            modelBuilder.Entity<LinkdContacts>().HasKey(x=> new {x.ClientId, x.ContactId});
+        }
+
         public DbSet<Contact> Contacts {get; set;}
         public DbSet<Client> Clients {get; set;}
+        public DbSet<LinkedClients> LinkedClients {get; set;}
+        public DbSet<LinkdContacts> LinkdContacts {get; set;}
         
     }
 }

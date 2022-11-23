@@ -29,12 +29,6 @@ export default function Home({clients, contacts}) {
       evt.currentTarget.className += " active";
     }
 
-    // function Unlinkclient(e){
-    //   console.log("eee", e)
-    //   props.setContact(e)
-    //   navigate('/unlinkclient')
-    // }
-
   return (
     <div>
       <div className="tab row">
@@ -66,7 +60,7 @@ export default function Home({clients, contacts}) {
               {
                 clients.map((client)=>{
                   return (
-                    <div key={client.id} className='row item'>
+                    <div key={client.key} className='row item'>
                       <div className='col-md-4 text-start h6'>{client.name}</div>
                       <div className='col-md-4 text-start h6'>{client.code}</div>
                       <div className='col-md-4 text-center h6'>{client.linkedContacts}</div>
@@ -98,7 +92,7 @@ export default function Home({clients, contacts}) {
                 {
                   contacts.map((contact)=>{
                     return (
-                      <div key={contact.id} className='row item'>
+                      <div key={contact.key} className='row item'>
                         <div className='col-md-4 text-start h6'>{`${contact.name} ${contact.surName}`}</div>
                         <div className='col-md-4 text-start h6'>{contact.email}</div>
                         <div className='col-md-4 text-center h6'>{contact.linkedClients}</div>

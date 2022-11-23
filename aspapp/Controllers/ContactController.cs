@@ -20,10 +20,8 @@ namespace AspApp.Controllers
     {
         private readonly IContactRepository _repo;
         private readonly DatabaseContext _context;
-        private readonly IMapper _mapper;
-        public ContactController(IContactRepository repo, DatabaseContext context, IMapper mapper)
+        public ContactController(IContactRepository repo, DatabaseContext context)
         {
-            _mapper = mapper;
             _context = context;
             _repo = repo;
 
@@ -33,53 +31,15 @@ namespace AspApp.Controllers
         public async Task<ActionResult<List<ContactDto>>> Get()
         {
             var contacts =  await _repo.GetContacts();
-
-            return _mapper.Map<List<ContactDto>>(contacts);
-        }
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<ContactDto>> Get(int id)
-        {
-            var genre = await _context.Contacts.FirstOrDefaultAsync(x => x.Id == id );
-            if(genre == null)
-            {
-                return NotFound();
-            }
-            return _mapper.Map<ContactDto>(genre);
+            return contacts;
         }
 
         [HttpPost]
          public async Task<IActionResult> Post([FromBody] ContactCreationDto contactCreationDto)
          {
-            var contact = _mapper.Map<Contact>(contactCreationDto);
-            await _repo.AddContact(contact);
+            var contact = await _repo.AddContact(contactCreationDto);
 
            return Ok(contact);
-         }
-
-         [HttpPut("{id:int}")]
-         public async Task<ActionResult> Put(int id, [FromBody] ContactCreationDto genreCreationDto)
-         {
-            var genre = _mapper.Map<Contact>(genreCreationDto);
-            genre.Id = id;
-
-            _context.Entry(genre).State = EntityState.Modified;
-
-            await _context.SaveChangesAsync();
-            return NoContent();
-         }
-
-         [HttpDelete("{id:int}")]
-         public async Task<ActionResult> Delete(int id)
-         {
-            var genre = await _context.Contacts.FirstOrDefaultAsync(x => x.Id == id);
-
-            if(genre == null)
-            {
-                return NotFound();
-            }
-            _context.Remove(genre);
-            await _context.SaveChangesAsync();
-            return NoContent();
          }
 
     }

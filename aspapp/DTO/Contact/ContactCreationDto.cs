@@ -10,10 +10,11 @@ namespace AspApp.DTO.Contact
     {
         [Required]
         [StringLength(50)]
+        public string? key {get; set;}
         public string? Name {get; set;}
         public string? SurName {get; set;}
         public string? Email {get; set;}
-        public int? LinkedClients {get; set;}
+        public IEnumerable<string>? Clients {get; set;}
 
     }
 }

@@ -49,6 +49,7 @@ export default function CreateClient({contacts, setClients}) {
         if(name.length===0)
           setError(true)
         else{
+          setError(false)
           setsaveValue(false)
           setTimeout(() => {
             setsaveValue(true)

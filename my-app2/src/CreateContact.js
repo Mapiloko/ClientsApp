@@ -43,6 +43,7 @@ export default function CreateContact({emails, clients, setContacts}) {
           setEmail("")
           setName("")
           setSurname("")
+          setSaved(false)
         }
     }
 

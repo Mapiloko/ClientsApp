@@ -10,7 +10,7 @@ export default function CreateClient({contacts, setClients}) {
 
   const [name, setName] = useState("")
   const [likedC, setLinked] = useState([])
-  const [code, setCode] = useState("")
+  const [error, setError] = useState(false)
   const [saveValue, setsaveValue] = useState(true)
   const [valueSaved, setvalueSaved] = useState(false)
   const navigate = useNavigate()
@@ -46,28 +46,31 @@ export default function CreateClient({contacts, setClients}) {
       }
       
       const SaveClient =()=>{
-        setsaveValue(false)
-        setTimeout(() => {
-          setsaveValue(true)
-        }, 1000);
-        
-        var code = generateCode()
-
-        const unique_id = uuid();
-
-        setClients({key: unique_id, linkedContacts: likedC.length, name: name, code: code})
-
-        const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: unique_id, name: name, code: code, contacts: likedC})
-        };
-
-        fetch('https://localhost:5000/api/client', requestOptions)
-            .then(response => response.json())
-            .catch(e=> console.log(e))
-        setName("")
-        setvalueSaved(true)
+        if(name.length===0)
+          setError(true)
+        else{
+          setsaveValue(false)
+          setTimeout(() => {
+            setsaveValue(true)
+          }, 1000);
+          
+          var code = generateCode()
+  
+          const unique_id = uuid();
+  
+          setClients({key: unique_id, linkedContacts: likedC.length, name: name, code: code})
+          const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: unique_id, name: name, code: code, contacts: likedC})
+          };
+  
+          fetch('https://localhost:5000/api/client', requestOptions)
+              .then(response => response.json())
+              .catch(e=> console.log(e))
+          setName("")
+          setvalueSaved(true)
+        }
     }
 
     const linkContacts = (e, id)=>{
@@ -88,7 +91,7 @@ export default function CreateClient({contacts, setClients}) {
     <div>
       <h3>Creating New Client:</h3>
       <div className='row clinetcontent'>
-        <div className='col-md-6'>
+        <div className='col-md-6 my-3'>
             <label className='labelInput'>Client Name :</label>
         </div>
         <div className='col-md-6 my-3'>
@@ -99,6 +102,11 @@ export default function CreateClient({contacts, setClients}) {
               placeholder="Enter name"
               onChange={(e)=>setName(e.target.value)}
           />
+          {error &&
+            <>
+                <p style={{color:"red", marginBottom:"-1rem"}}>Name field is required*</p>
+            </>
+          }
         </div>
         <div className='col-md-6' style={{display: contacts.length ===0 && "none" }}>
             <label className='labelInput'>Link Contacts :</label>

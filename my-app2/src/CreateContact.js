@@ -13,32 +13,37 @@ export default function CreateContact({emails, clients, setContacts}) {
   const [likedC, setLinked] = useState([])
   const [saveValue, setsaveValue] = useState(true)
   const [valueSaved, setvalueSaved] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [message, setMessage] = useState("")
   const navigate = useNavigate()
 
 
     const SaveContact =()=>{
-        setsaveValue(false)
-        setTimeout(() => {
-            setsaveValue(true)
-        }, 1000);
-        const unique_id = uuid();
-        setContacts({name: name, surName: surname, email: email,linkedClients: likedC.length, key : unique_id })
-
-        const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({key : unique_id, name: name, surName: surname, clients:likedC, email: email})
-        };
-
-        fetch('https://localhost:5000/api/contact', requestOptions)
-            .then(response => response.json())
-            .catch(e=> console.log(e))
-
-        setvalueSaved(true)
-        setEmail("")
-        setName("")
-        setSurname("")
+        if(name.length ===0 || email.length === 0 || surname.length ===0)
+          setSaved(true)
+        else{
+          setsaveValue(false)
+          setTimeout(() => {
+              setsaveValue(true)
+          }, 1000);
+          const unique_id = uuid();
+          setContacts({name: name, surName: surname, email: email,linkedClients: likedC.length, key : unique_id })
+  
+          const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({key : unique_id, name: name, surName: surname, clients:likedC, email: email})
+          };
+  
+          fetch('https://localhost:5000/api/contact', requestOptions)
+              .then(response => response.json())
+              .catch(e=> console.log(e))
+  
+          setvalueSaved(true)
+          setEmail("")
+          setName("")
+          setSurname("")
+        }
     }
 
     const linkClients = (e, id)=>{
@@ -80,7 +85,7 @@ export default function CreateContact({emails, clients, setContacts}) {
     <div>
       <h3>Creating New Contact:</h3>
       <div className='row clinetcontent'>
-        <div className='col-md-6'>
+        <div className='col-md-6 my-3'>
             <label className='labelInput'>Contact Name :</label>
         </div>
         <div className='col-md-6 my-3'>
@@ -92,8 +97,13 @@ export default function CreateContact({emails, clients, setContacts}) {
               placeholder="Enter name"
               onChange={(e)=>setName(e.target.value)}
           />
+          {name.length===0 && saved &&
+            <>
+                <p style={{color:"red", marginBottom:"-1rem"}}>Name field is required*</p>
+            </>
+          }
         </div>
-        <div className='col-md-6'>
+        <div className='col-md-6 my-3'>
             <label className='labelInput'>Contact Surname :</label>
         </div>
         <div className='col-md-6 my-3'>
@@ -105,8 +115,13 @@ export default function CreateContact({emails, clients, setContacts}) {
               placeholder="Enter name"
               onChange={(e)=>setSurname(e.target.value)}
           />
+          {surname.length===0 && saved &&
+            <>
+                <p style={{color:"red", marginBottom:"-1rem"}}>Surname field is required*</p>
+            </>
+          }
         </div>
-        <div className='col-md-6'>
+        <div className='col-md-6 my-3'>
             <label className='labelInput'>Email Address :</label>
         </div>
         <div className='col-md-6 my-3'>
@@ -118,15 +133,14 @@ export default function CreateContact({emails, clients, setContacts}) {
               placeholder="Enter Email"
               onChange={(e)=>checkEmail(e)}
           />
-          <p
-            style={{
-              color: "red",
-              // marginTop: "-8px",
-              display: emailvalid && "none",
-            }}
-          >
-              {message}*
-          </p>
+          {email.length===0 && saved &&
+            <>
+                <p style={{color:"red", marginBottom:"-1rem"}}>Email field is required*</p>
+            </>
+          }
+          {email.length!==0 &&
+            <p style={{color: "red",display: emailvalid && "none"}}>{message}*</p>
+          }
         </div>
         <div className='col-md-6' style={{display: clients.length=== 0  && "none" }} >
             <label className='labelInput'>Link Clients :</label>
@@ -139,7 +153,7 @@ export default function CreateContact({emails, clients, setContacts}) {
         </FormGroup>
         </div>
       <div className='col-md-12 text-center'>
-        <button className='saveBtn text-center' disabled={!emailvalid || name.length==0 || surname.length === 0} onClick={SaveContact}>
+        <button className='saveBtn text-center' onClick={SaveContact}>
             Save
         </button>
       </div>

@@ -83,9 +83,10 @@ export default function Home({clients, contacts}) {
            contacts.length===0 ? <h3 className='text-center' > No Contact(s) found</h3> :
            <>
               <div className='row headings'>
-                <div className='col-md-4 text-start h4'>Full Name</div>
-                <div className='col-md-4 text-start h4'>Email address</div>
-                <div className='col-md-4 text-center h4'># of Liked Clients</div>
+                <div className='col-md-3 text-start h4'>Full Name</div>
+                <div className='col-md-3 text-start h4'>Full Name</div>
+                <div className='col-md-3 text-start h4'>Email address</div>
+                <div className='col-md-3 text-center h4'># of Liked Clients</div>
               </div>
 
               <div className='row content'>
@@ -93,9 +94,10 @@ export default function Home({clients, contacts}) {
                   contacts.map((contact)=>{
                     return (
                       <div key={contact.key} className='row item'>
-                        <div className='col-md-4 text-start h6'>{`${contact.name} ${contact.surName}`}</div>
-                        <div className='col-md-4 text-start h6'>{contact.email}</div>
-                        <div className='col-md-4 text-center h6'>{contact.linkedClients}</div>
+                        <div className='col-md-3 text-start h6'>{contact.name}</div>
+                        <div className='col-md-3 text-start h6'>{contact.surName}</div>
+                        <div className='col-md-3 text-start h6'>{contact.email}</div>
+                        <div className='col-md-3 text-center h6'>{contact.linkedClients}</div>
 
                         {/* <div className='col-md-4 text-center h6'><button onClick={()=>Unlinkclient(contact)} className='unlinkClient'>Unlike clients</button> </div> */}
                       </div>

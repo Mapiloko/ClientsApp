@@ -15,10 +15,31 @@ function App() {
   const [clients, setClients] = useState([])
   const [emails, setEmails] = useState([])
 
+  const sorterClients = (a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  };
+
+  const sorterContacts = (a, b) => {
+    if (`${a.name}${a.surName} ` < `${b.name}${b.surName}` ) {
+      return -1;
+    }
+    if (`${a.name}${a.surName} ` > `${b.name}${b.surName}` ) {
+      return 1;
+    }
+    return 0;
+  };
+
   useEffect(()=>{
     fetch('https://localhost:5000/api/Contact')
         .then(response => response.json())
         .then((data) =>{
+          data.sort(sorterContacts)
           setContacts(data)
           let arr = []
           data.forEach(element => {
@@ -31,6 +52,7 @@ function App() {
     fetch('https://localhost:5000/api/client')
         .then(response => response.json())
         .then((data) =>{
+          data.sort(sorterClients)
           setClients(data)
         });
   },[])

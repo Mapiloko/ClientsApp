@@ -14,6 +14,7 @@ function App() {
   const [contact, setContact] = useState(null)
   const [clients, setClients] = useState([])
   const [emails, setEmails] = useState([])
+  const [codes, setCodes] = useState([])
 
   const sorterClients = (a, b) => {
     if (a.name < b.name) {
@@ -40,20 +41,26 @@ function App() {
         .then(response => response.json())
         .then((data) =>{
           data.sort(sorterContacts)
-          setContacts(data)
           let arr = []
           data.forEach(element => {
+            element["checked"] = false;
             arr.push(element.email)
           });
-
+          setContacts(data)
           setEmails(arr)
         });
 
     fetch('https://localhost:5000/api/client')
         .then(response => response.json())
         .then((data) =>{
+          let arr = []
+          data.forEach(element => {
+            element["checked"] = false;
+            arr.push(element.code)
+          });
           data.sort(sorterClients)
           setClients(data)
+          setCodes(arr)
         });
   },[])
 
@@ -68,7 +75,9 @@ function App() {
         { setEmails([...emails, e.email])
           setContacts([...contacts, e])
         }} clients={clients} contacts={contacts}/>} />
-        <Route path="/createclient" element={<CreateClient setClients={(e)=>setClients([...clients, e])} clients={clients} contacts={contacts} />} />
+        <Route path="/createclient" element={<CreateClient setClients={(e)=>
+        { setCodes([...codes, e.code])
+          setClients([...clients, e])}} clients={clients} codes={codes} contacts={contacts} />} />
         <Route path="/unlinkclient" element={<UnlinkClient clients={clients} contact={contact}/>} />
         </Routes >
       </Router>

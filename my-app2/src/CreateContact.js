@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useState,useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
@@ -11,6 +11,7 @@ export default function CreateContact({emails, clients, setContacts}) {
   const [email, setEmail] = useState("")
   const [emailvalid, setValidEmail] = useState(true)
   const [likedC, setLinked] = useState([])
+  const [displayClients, setDisplayCliets] = useState([])
   const [saveValue, setsaveValue] = useState(true)
   const [valueSaved, setvalueSaved] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -18,6 +19,20 @@ export default function CreateContact({emails, clients, setContacts}) {
   const navigate = useNavigate()
 
 
+  const sorterClients = (a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  };
+
+  useEffect(()=>{
+    clients.sort(sorterClients)
+    setDisplayCliets(clients)
+  },[])
     const SaveContact =()=>{
         if(name.length ===0 || email.length === 0 || surname.length ===0)
           setSaved(true)
@@ -26,8 +41,13 @@ export default function CreateContact({emails, clients, setContacts}) {
           setTimeout(() => {
               setsaveValue(true)
           }, 1000);
+
+          displayClients.forEach((cl)=>{
+            cl.checked = false
+          })
+
           const unique_id = uuid();
-          setContacts({name: name, surName: surname, email: email,linkedClients: likedC.length, key : unique_id })
+          setContacts({name: name, surName: surname, email: email,linkedClients: likedC.length, key : unique_id, checked: false})
   
           const requestOptions = {
             method: 'POST',
@@ -47,22 +67,35 @@ export default function CreateContact({emails, clients, setContacts}) {
         }
     }
 
-    const linkClients = (e, id)=>{
-      if(e.target.checked)
-      {
-        setLinked([...likedC, id])
-      }
-      else
-      {
-        const index = likedC.indexOf(id);
-        if (index > -1) { 
-          likedC.splice(index, 1);
+    const linkClients = (e, key)=>{
+      displayClients.forEach((cl)=>{
+        if(cl.key===key)
+        {
+          let newvalue = cl
+          newvalue.checked = !cl.checked
+  
+          var newValues = displayClients.filter((c)=>{
+            return c.key !== key;
+          })
+          newValues.push(newvalue)
+          newValues.sort(sorterClients)
+          setDisplayCliets(newValues)
+          if(newvalue.checked)
+          {
+            setLinked([...likedC, key])
+          }
+          else
+          {
+            const index = likedC.indexOf(key);
+            if (index > -1) { 
+              likedC.splice(index, 1);
+            }
+          }
         }
-      }
+      })
     }
     const checkEmail = (e)=>{
       setEmail(e.target.value)
-      console.log("emails", emails)
       if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value))
       {
         setMessage("Please enter valid email addess")
@@ -148,8 +181,9 @@ export default function CreateContact({emails, clients, setContacts}) {
         </div>
         <div className='col-md-6'>
         <FormGroup>
-          {clients.map((client)=>{
-            return <FormControlLabel onChange={(e)=>linkClients(e,client.key)} value={client.name} key={client.key} control={<Checkbox />} label={client.name} />
+          {displayClients.map((client)=>{
+            return <FormControlLabel onChange={(e)=>linkClients(e,client.key)} 
+            value={client.name} key={client.key} control={<Checkbox checked={client.checked} />} label={client.name} />
           })}
         </FormGroup>
         </div>

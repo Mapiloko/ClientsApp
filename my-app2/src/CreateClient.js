@@ -6,15 +6,26 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
 
-export default function CreateClient({contacts, setClients}) {
+export default function CreateClient({contacts, codes, setClients}) {
 
   const [name, setName] = useState("")
   const [likedC, setLinked] = useState([])
   const [error, setError] = useState(false)
-  const [saveValue, setsaveValue] = useState(true)
+  const [typing, setTyping] = useState(false)
+  const [displayContacts, setDisplayContacts] = useState([])
   const [valueSaved, setvalueSaved] = useState(false)
   const navigate = useNavigate()
 
+
+  const sorterContacts = (a, b) => {
+    if (`${a.name}${a.surName} ` < `${b.name}${b.surName}` ) {
+      return -1;
+    }
+    if (`${a.name}${a.surName} ` > `${b.name}${b.surName}` ) {
+      return 1;
+    }
+    return 0;
+  };
 
     const generateCode = () =>{
       const myArray = name.trim().split(" ");
@@ -46,20 +57,24 @@ export default function CreateClient({contacts, setClients}) {
       }
       
       const SaveClient =()=>{
+          setTyping(false)
         if(name.length===0)
           setError(true)
         else{
           setError(false)
-          setsaveValue(false)
+          setvalueSaved(true)
           setTimeout(() => {
-            setsaveValue(true)
-          }, 1000);
-          
+            setvalueSaved(false)
+          }, 1500);
+
+          displayContacts.forEach((cl)=>{
+            cl.checked = false
+          })
           var code = generateCode()
   
           const unique_id = uuid();
   
-          setClients({key: unique_id, linkedContacts: likedC.length, name: name, code: code})
+          setClients({key: unique_id, linkedContacts: likedC.length, name: name, code: code, checked: false})
           const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -74,18 +89,38 @@ export default function CreateClient({contacts, setClients}) {
         }
     }
 
-    const linkContacts = (e, id)=>{
-      if(e.target.checked)
-      {
-        setLinked([...likedC, id])
-      }
-      else
-      {
-        const index = likedC.indexOf(id);
-        if (index > -1) { 
-          likedC.splice(index, 1);
+    useEffect(()=>{
+      contacts.sort(sorterContacts)
+      setDisplayContacts(contacts)
+    },[])
+
+
+    const linkContacts = (e, key)=>{
+      displayContacts.forEach((cl)=>{
+        if(cl.key===key)
+        {
+          let newvalue = cl
+          newvalue.checked = !cl.checked
+  
+          var newValues = displayContacts.filter((c)=>{
+            return c.key !== key;
+          })
+          newValues.push(newvalue)
+          newValues.sort(sorterContacts)
+          setDisplayContacts(newValues)
+          if(newvalue.checked)
+          {
+            setLinked([...likedC, key])
+          }
+          else
+          {
+            const index = likedC.indexOf(key);
+            if (index > -1) { 
+              likedC.splice(index, 1);
+            }
+          }
         }
-      }
+      })
     }
 
   return (
@@ -101,9 +136,12 @@ export default function CreateClient({contacts, setClients}) {
               id="outlined-name"
               label="Name"
               placeholder="Enter name"
-              onChange={(e)=>setName(e.target.value)}
+              onChange={(e)=>{
+                setTyping(true)
+                setName(e.target.value)
+              }}
           />
-          {error &&
+          {error && !typing &&
             <>
                 <p style={{color:"red", marginBottom:"-1rem"}}>Name field is required*</p>
             </>
@@ -114,8 +152,9 @@ export default function CreateClient({contacts, setClients}) {
         </div>
         <div className='col-md-6'>
         <FormGroup>
-          {contacts.map((contact)=>{
-            return <FormControlLabel onChange={(e)=>linkContacts(e,contact.key)} value={contact.name} key={contact.key} control={<Checkbox />} label={contact.name} />
+          {displayContacts.map((contact)=>{
+            return <FormControlLabel onChange={(e)=>linkContacts(e,contact.key)} 
+            value={contact.name} key={contact.key} control={<Checkbox checked={contact.checked} />} label={contact.name} />
           })}
         </FormGroup>
         </div>
@@ -132,7 +171,7 @@ export default function CreateClient({contacts, setClients}) {
       </div>
       {valueSaved && 
         <div>
-            <h6 className='text-center' style={{color:"green", display: saveValue && "none" }}>Client Saved</h6>
+            <h6 className='text-center' style={{color:"green"}}>Client Saved</h6>
         </div>
       }
     </div>
